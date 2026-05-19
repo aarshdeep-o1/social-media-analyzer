@@ -1,6 +1,7 @@
 import streamlit as st
 from utils.data_loader import load_data, filter_data
 from utils.charts import engagement_chart, media_type_chart, category_chart
+from utils.sidebar import create_sidebar
 
 st.set_page_config(page_title="Engagement Analytics", page_icon="📈", layout="wide")
 st.markdown("""
@@ -9,12 +10,6 @@ st.markdown("""
 html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
 [data-testid="stSidebar"] { background: linear-gradient(180deg, #0f0c29, #302b63, #24243e) !important; }
 [data-testid="stSidebar"] * { color: #e0e0e0 !important; }
-[data-testid="stSidebar"] .stSelectbox > div > div { background: rgba(255,255,255,0.08) !important; color: white !important; border: 1px solid rgba(255,255,255,0.15) !important; }
-[data-testid="stSidebarContent"] { padding-top: 1rem !important; }
-.sidebar-logo { text-align: center; padding: 8px 0 4px 0; }
-.sidebar-logo .icon { font-size: 36px; }
-.sidebar-logo .name { font-size: 16px; font-weight: 700; color: white; margin-top: 4px; }
-.sidebar-logo .ver { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
 .kpi-card { background: var(--secondary-background-color); border-radius: 16px; padding: 24px 20px; box-shadow: 0 2px 12px rgba(99,91,255,0.08); border-left: 4px solid #635bff; text-align: center; margin-bottom: 8px; }
 .kpi-label { font-size: 12px; color: var(--text-color); opacity: 0.7; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
 .kpi-value { font-family: 'Space Mono', monospace; font-size: 26px; font-weight: 700; color: var(--text-color); }
@@ -25,22 +20,12 @@ html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
 </style>
 """, unsafe_allow_html=True)
 
-with st.sidebar:
-    st.markdown("""
-    <div class='sidebar-logo'>
-        <div class='icon'>📊</div>
-        <div class='name'>InstaAnalytics</div>
-        <div class='ver'>Dashboard v1.0</div>
-    </div>
-    <hr style='border-color:rgba(255,255,255,0.1); margin: 10px 0 16px 0;'>
-    """, unsafe_allow_html=True)
-    st.markdown("### 🔧 Filters")
-    df0 = load_data()
-    media_type = st.selectbox("Media Type", ["All","Reel","Photo","Video","Carousel"])
-    date_range = st.date_input("Date Range", [df0["upload_date"].min(), df0["upload_date"].max()])
-
 st.markdown("<div class='page-header'><h2>📈 Engagement Analytics</h2><p>Likes, comments, shares aur engagement rate — sab ek jagah</p></div>", unsafe_allow_html=True)
 df = load_data()
+create_sidebar()
+st.sidebar.markdown("### 🔧 Filters")
+media_type = st.sidebar.selectbox("Media Type", ["All","Reel","Photo","Video","Carousel"])
+date_range = st.sidebar.date_input("Date Range", [df["upload_date"].min(), df["upload_date"].max()])
 filtered = filter_data(df, media_type, date_range)
 
 col1, col2, col3, col4 = st.columns(4)

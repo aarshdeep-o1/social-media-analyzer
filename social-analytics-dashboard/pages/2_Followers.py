@@ -1,6 +1,7 @@
 import streamlit as st
 from utils.data_loader import load_data, filter_data
 from utils.charts import follower_growth_chart, traffic_chart, saves_vs_reach_chart
+from utils.sidebar import create_sidebar
 
 st.set_page_config(page_title="Follower Tracking", page_icon="👥", layout="wide")
 st.markdown("""
@@ -21,7 +22,7 @@ html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
 
 st.markdown("<div class='page-header'><h2>👥 Follower Tracking</h2><p>Growth trends, traffic sources aur reach analysis</p></div>", unsafe_allow_html=True)
 df = load_data()
-st.sidebar.markdown("""<div style='text-align:center;padding:16px 0 8px 0;'><div style='font-size:32px;'>📊</div><div style='font-size:16px;font-weight:700;color:white;margin-top:6px;'>InstaAnalytics</div></div><hr style='border-color:rgba(255,255,255,0.1);'>""", unsafe_allow_html=True)
+create_sidebar()
 st.sidebar.markdown("### 🔧 Filters")
 media_type = st.sidebar.selectbox("Media Type", ["All","Reel","Photo","Video","Carousel"])
 date_range = st.sidebar.date_input("Date Range", [df["upload_date"].min(), df["upload_date"].max()])
