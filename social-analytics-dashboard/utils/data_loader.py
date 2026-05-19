@@ -1,9 +1,12 @@
 import pandas as pd
 import streamlit as st
+import os
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data/Instagram_Analytics.csv", parse_dates=["upload_date"])
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_dir, "../data/Instagram_Analytics.csv")
+    df = pd.read_csv(file_path, parse_dates=["upload_date"])
     return df
 
 def filter_data(df, media_type=None, date_range=None):
